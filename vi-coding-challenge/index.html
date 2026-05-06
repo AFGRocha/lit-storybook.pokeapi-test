@@ -10,5 +10,12 @@
   </head>
   <body>
     <app-container></app-container>
+    <script type="module">
+      import pokeapiService from './src/pokeapi.service.ts';
+      const container = document.querySelector('app-container');
+      container.fetchItemsFunction = pokeapiService.fetchPokemon;
+      container.fetchFilterTypesFunction = pokeapiService.fetchTypes;
+      container.shouldInitialize = true;
+    </script>
   </body>
 </html>

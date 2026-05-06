@@ -1,19 +1,8 @@
 import { LitElement, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 
-/**
- * An example element.
- *
- * @slot - This element has a slot
- * @csspart button - The button
- */
 @customElement('my-filters')
 export class Filters extends LitElement {
-  /**
-   * The number of times the button has been clicked.
-   */
-  @property({ type: Number })
-  count = 0
 
   @property({ type: String })
   filterTitle = 'Filter'
@@ -21,37 +10,27 @@ export class Filters extends LitElement {
   @property({ type: String })
   filterType = 'Type'
 
-  @property({ type: String })
-  apiRoute = 'https://pokeapi.co/api/v2/type/'
-
   @property({ type: Array })
-  items: any[] = []
+  filterItems: string[] = []
 
   @property({ type: Array })
   selected: any[] = []
 
   render() {
     return html`
-      <section class="filter-container">
-        <div>
-          <slot></slot> 
-        </div>
+      <section class="filter-container">  
         <div>
           <h3>${this.filterTitle}</h3>
           <p>${this.filterType}</p>
 
           <div class="checkbox-container">
-            ${this.items.map(item => html`<div class="checkbox-item"><input type="checkbox" @change=${(e: Event) => this._handleCheckbox(e, item.name)} /> ${item.name.charAt(0).toUpperCase() + item.name.slice(1)}</div>`)}
+            ${this.filterItems.map(item => html`<div class="checkbox-item"><input type="checkbox" @change=${(e: Event) => this._handleCheckbox(e, item)} /> ${item.charAt(0).toUpperCase() + item.slice(1)}</div>`)}
          </div>
         </div>
       </section>
     `
   }
 
-
-  firstUpdated() {
-    this._callApi()
-  }
 
   private _handleCheckbox(e: Event, itemName: string) {
     const checkbox = e.target as HTMLInputElement
@@ -67,17 +46,6 @@ export class Filters extends LitElement {
       bubbles: true,
       composed: true
     }))
-  }
-
-  private async _callApi() {
-    try {
-      const response = await fetch(this.apiRoute)
-      const data = await response.json()
-      this.items = data.results
-      console.log(this.items)
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
   }
 
   static styles = css`

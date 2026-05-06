@@ -6,7 +6,22 @@ export class ItemCard extends LitElement {
   @property({ type: String }) title = '';
   @property({ type: Array }) description: string[] = [];
   @property({ type: String }) image = '';
+  @property({ type: String }) entry = '';
   @property({ type: Boolean }) showImages = false;
+
+
+
+  render() {
+    return html`
+      <div class="card">
+        ${this.image ? html`<div class="card-image-wrapper"><img src="${this.image}" alt="${this.title}" class="card-image" />${this.entry ? html`<div class="entry-number">#${this.entry}</div>` : ''}</div>` : ''}
+        <div class="card-content">
+          ${this.title ? html`<h2 class="card-title">${this.title.charAt(0).toUpperCase() + this.title.slice(1)}</h2>` : ''}
+          ${this.description.length ? (this.showImages ? html`<div class="type-images">${this.description.map((type: any) => html`<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/${type.index}.png" alt="${type.name}" class="type-image" title="${type.name}" />`)}</div>` : html`<p class="card-description">${this.description.map((type: any) => type.name).join(', ')}</p>`) : ''}
+        </div>
+      </div>
+    `;
+  }
 
   static styles = css`
     :host {
@@ -21,10 +36,28 @@ export class ItemCard extends LitElement {
       background: white;
     }
 
-    .card-image {
+    .card-image-wrapper {
+      position: relative;
       width: 100%;
       height: 300px;
+    }
+
+    .card-image {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
+    }
+
+    .entry-number {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
     }
 
     .card-content {
@@ -55,18 +88,6 @@ export class ItemCard extends LitElement {
       object-fit: contain;
     }
   `;
-
-  render() {
-    return html`
-      <div class="card">
-        ${this.image ? html`<img src="${this.image}" alt="${this.title}" class="card-image" />` : ''}
-        <div class="card-content">
-          ${this.title ? html`<h2 class="card-title">${this.title.charAt(0).toUpperCase() + this.title.slice(1)}</h2>` : ''}
-          ${this.description.length ? (this.showImages ? html`<div class="type-images">${this.description.map((type: any) => html`<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/${type.index}.png" alt="${type.name}" class="type-image" title="${type.name}" />`)}</div>` : html`<p class="card-description">${this.description.map((type: any) => type.name).join(', ')}</p>`) : ''}
-        </div>
-      </div>
-    `;
-  }
 }
 
 
