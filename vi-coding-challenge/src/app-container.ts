@@ -1,8 +1,10 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { PropertyValues } from 'lit';
+import { Router } from '@lit-labs/router';
 import './my-filters'
 import './item-card'
+import './item-details'
 
 @customElement('app-container')
 export class AppContainer extends LitElement {
@@ -11,6 +13,11 @@ export class AppContainer extends LitElement {
 
   @property({ type: Array })
   items: any[] = []
+
+  private router = new Router(this, [
+    { path: '/', render: () => this.renderHome() },
+    { path: '/details/:id', render: (params: any) => this.renderDetails(params.id) },
+  ])
 
   @property()
   fetchItemsFunction: (limit: number, offset: number, typesMap: Map<string, any[]>) => Promise<any[]> = async () => []
@@ -31,11 +38,15 @@ export class AppContainer extends LitElement {
   private savedData: any[] = []
 
   render() {
+    return html`${this.router.outlet()}`;
+  }
+
+  private renderHome() {
     return html`
-        <div class="header">
-          <h1>These are our products</h1>
-        </div>
-        
+      <div class="header">
+        <h1>These are our products</h1>
+      </div>
+      
       <div class="container">
         <div class="filters-section">
           <my-filters .filterItems=${this.availableTypes} showImages @selection-changed=${this._handleSelectionChange}></my-filters>
@@ -50,6 +61,7 @@ export class AppContainer extends LitElement {
                 .image=${item.image}
                 .entry=${item.entry}
                 showImages
+                @click=${() => this._navigateToDetails(item.entry)}
               ></item-card>
             `)}
           </div>
@@ -58,7 +70,23 @@ export class AppContainer extends LitElement {
     `;
   }
 
+  private renderDetails(itemId: string) {
+    return html`<item-details .itemId=${itemId}></item-details>`;
+  }
+
+  private _navigateToDetails(itemId: string) {
+    window.history.pushState({ page: 'details', itemId }, '', `/details/${itemId}`);
+    this.router.goto(`/details/${itemId}`);
+  }
+
   private initialized = false
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('popstate', () => {
+      this.router.goto(window.location.pathname);
+    });
+  }
 
   updated(changedProperties: PropertyValues) {
     if (changedProperties.has('shouldInitialize') && this.shouldInitialize && !this.initialized) {
@@ -162,6 +190,10 @@ export class AppContainer extends LitElement {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 16px;
+    }
+
+    item-card {
+      cursor: pointer;
     }
   `;
 }
