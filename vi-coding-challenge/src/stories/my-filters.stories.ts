@@ -7,7 +7,12 @@ export default {
   args: {
     filterTitle: "Filter",
     filterType: "Type",
-    filterItems: ["fire", "water", "grass", "electric"],
+    filterItems: [
+      { name: "fire", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/small/10.png" },
+      { name: "water", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/small/11.png" },
+      { name: "grass", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/small/12.png" },
+      { name: "electric", image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/small/13.png" }
+    ],
     showImages: true,
   },
   argTypes: {
@@ -33,5 +38,13 @@ export const NoFilters = (args: any) => html`
     .filterType=${args.filterType}
     .filterItems=${[]}
     ?showImages=${args.showImages}
+  ></my-filters>
+`;
+
+export const NoImages = (args: any) => html`
+  <my-filters 
+    .filterTitle=${args.filterTitle}
+    .filterType=${args.filterType}
+    .filterItems=${args.filterItems}
   ></my-filters>
 `;

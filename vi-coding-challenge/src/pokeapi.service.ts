@@ -18,7 +18,6 @@ async function fetchPokemon(limit: number, offset: number, typesMap: Map<string,
             }
         })
 
-        //this.savedData = [...this.items]
         offset += limit
     } catch (error) {
         console.error('Error fetching pokemon:', error)
@@ -37,8 +36,11 @@ async function fetchTypes() {
     for (const type of typesData.results) {
         const typeResponse = await fetch(type.url)
         const typeDetail = await typeResponse.json()
-        typeData.set(type.name, typeDetail)
+        if(typeDetail.id <= 18) {
+            typeDetail.image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-ix/scarlet-violet/small/${typeDetail.id}.png`
+        } 
 
+        typeData.set(type.name, typeDetail)
         for (const pokemon of typeDetail.pokemon) {
             const name = pokemon.pokemon.name
             if (!typeMap.has(name)) {

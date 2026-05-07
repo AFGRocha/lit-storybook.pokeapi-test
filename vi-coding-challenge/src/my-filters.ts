@@ -11,10 +11,13 @@ export class Filters extends LitElement {
   filterType = 'Type'
 
   @property({ type: Array })
-  filterItems: string[] = []
+  filterItems: any[] = []
 
   @property({ type: Array })
   selected: any[] = []
+
+  @property({ type: Boolean })
+  showImages = false
 
   render() {
     return html`
@@ -24,7 +27,7 @@ export class Filters extends LitElement {
           <p>${this.filterType}</p>
 
           <div class="checkbox-container">
-            ${this.filterItems.map(item => html`<div class="checkbox-item"><input type="checkbox" @change=${(e: Event) => this._handleCheckbox(e, item)} /> ${item.charAt(0).toUpperCase() + item.slice(1)}</div>`)}
+            ${this.filterItems.map(item => html`<div class="checkbox-item"><input type="checkbox" @change=${(e: Event) => this._handleCheckbox(e, item.name)} /> ${item.name.charAt(0).toUpperCase() + item.name.slice(1)} ${item.image && this.showImages ? html`<img class="filter-image" src="${item.image}" alt="${item.name}" style="width: 24px; height: 24px;" />` : ''}</div>`)}
          </div>
         </div>
       </section>
@@ -39,7 +42,6 @@ export class Filters extends LitElement {
     } else {
       this.selected = this.selected.filter(item => item !== itemName)
     }
-    console.log(this.selected)
     
     this.dispatchEvent(new CustomEvent('selection-changed', {
       detail: { selected: this.selected },
@@ -49,9 +51,13 @@ export class Filters extends LitElement {
   }
 
   static styles = css`
+    :host {
+      font-family: 'Open Sans', sans-serif;
+    }
 
     .filter-container {
-      border: 1px solid #ccc;
+      border: 3px solid #8a4ebb;
+      border-radius: 8px;
       padding: 8px;
     }
     .checkbox-container {
@@ -64,6 +70,10 @@ export class Filters extends LitElement {
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    .filter-image {
+      border-radius: 4px; 
     }
   `
 }

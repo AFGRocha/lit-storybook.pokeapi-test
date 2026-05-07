@@ -26,10 +26,11 @@ export class ItemCard extends LitElement {
   static styles = css`
     :host {
       display: block;
+      font-family: 'Open Sans', sans-serif;
     }
 
     .card {
-      border: 1px solid #ccc;
+      border: 2px solid #8a4ebb;
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -45,7 +46,7 @@ export class ItemCard extends LitElement {
     .card-image {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
     }
 
     .entry-number {
@@ -56,16 +57,18 @@ export class ItemCard extends LitElement {
       color: white;
       padding: 4px 8px;
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 16px;
       font-weight: 600;
     }
 
     .card-content {
-      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 16px;
     }
 
     .card-title {
-      margin: 0 0 8px 0;
       font-size: 18px;
       font-weight: 600;
     }
@@ -84,7 +87,6 @@ export class ItemCard extends LitElement {
 
     .type-image {
       width: 72px;
-      height: 72px;
       object-fit: contain;
     }
   `;
